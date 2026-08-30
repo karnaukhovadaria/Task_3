@@ -1,0 +1,71 @@
+import PageObjects.AccountPage;
+import PageObjects.AuthPage;
+import PageObjects.MainPage;
+import PageObjects.RegistrationPage;
+import Steps.UserSteps;
+import User.User;
+import io.qameta.allure.Description;
+import io.qameta.allure.junit5.AllureJunit5;
+import io.restassured.RestAssured;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebDriver;
+import User.DataGenerator;
+
+import static API.Constants.REG_PAGE;
+
+@ExtendWith(AllureJunit5.class)
+public class RegistrationTest {
+
+private WebDriver webDriver;
+MainPage mainPage;
+AuthPage authPage;
+RegistrationPage registrationPage;
+AccountPage accountPage;
+
+private final UserSteps userSteps = new UserSteps();
+private final User user = DataGenerator.randomUser();
+private final User userWithShortPassword = DataGenerator.userWithShortPassword();
+private boolean userCreated = false;
+
+@BeforeEach
+    void setUp() {
+    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+    webDriver = WebDriverFactory.getWebDriver("chrome");
+    webDriver.get(REG_PAGE);
+
+    mainPage = new MainPage(webDriver);
+    authPage = new AuthPage(webDriver);
+    registrationPage = new RegistrationPage(webDriver);
+    accountPage = new AccountPage(webDriver);
+    registrationPage.openRegistrationPage();
+}
+@Test
+    @Description("Проверка регистрации - успех")
+    void userRegistrationSuccess() {
+    registrationPage.registrationInput(user);
+    mainPage.openMainPage();
+    Assertions.assertTrue(mainPage.createOrderButtonIsDisplayed());
+    userCreated = true;
+}
+@Test
+    @Description("Проверка регистрации - неуспех, пароль менее 6 символов")
+    void userRegistrationWithShortPassword() {
+    registrationPage.registrationInput(userWithShortPassword);
+    Assertions.assertTrue(registrationPage.errorMessageCheck());
+}
+@AfterEach
+    void teardown() {
+    WebDriverFactory.driverQuit(webDriver);
+    if (userCreated) {
+        userSteps
+                .userDelete(userSteps.getAccessToken(user));
+    }
+}
+
+}
