@@ -1,9 +1,9 @@
-import PageObjects.AccountPage;
-import PageObjects.AuthPage;
-import PageObjects.MainPage;
-import PageObjects.RegistrationPage;
-import Steps.UserSteps;
-import User.User;
+import pageobjects.AccountPage;
+import pageobjects.AuthPage;
+import pageobjects.MainPage;
+import pageobjects.RegistrationPage;
+import steps.UserSteps;
+import user.User;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit5.AllureJunit5;
 import io.restassured.RestAssured;
@@ -15,9 +15,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
-import User.DataGenerator;
+import user.DataGenerator;
 
-import static API.Constants.REG_PAGE;
+import static api.Constants.REG_PAGE;
 
 @ExtendWith(AllureJunit5.class)
 public class RegistrationTest {

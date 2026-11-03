@@ -1,10 +1,10 @@
-import PageObjects.AccountPage;
-import PageObjects.AuthPage;
-import PageObjects.MainPage;
-import PageObjects.RegistrationPage;
-import Steps.UserSteps;
-import User.DataGenerator;
-import User.User;
+import pageobjects.AccountPage;
+import pageobjects.AuthPage;
+import pageobjects.MainPage;
+import pageobjects.RegistrationPage;
+import steps.UserSteps;
+import user.DataGenerator;
+import user.User;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit5.AllureJunit5;
 import io.restassured.RestAssured;
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 
 
-import static API.Constants.MAIN_PAGE;
+import static api.Constants.MAIN_PAGE;
 
 @ExtendWith(AllureJunit5.class)
 public class CheckTransitionsTest {

@@ -1,4 +1,4 @@
-import PageObjects.MainPage;
+import pageobjects.MainPage;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit5.AllureJunit5;
 import org.junit.jupiter.api.AfterEach;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 
-import static API.Constants.MAIN_PAGE;
+import static api.Constants.MAIN_PAGE;
 
 @ExtendWith(AllureJunit5.class)
 public class ConstructorTest {

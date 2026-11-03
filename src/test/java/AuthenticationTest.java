@@ -1,7 +1,7 @@
-import PageObjects.*;
-import Steps.UserSteps;
-import User.DataGenerator;
-import User.User;
+import pageobjects.*;
+import steps.UserSteps;
+import user.DataGenerator;
+import user.User;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit5.AllureJunit5;
 import io.restassured.RestAssured;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 
-import static API.Constants.MAIN_PAGE;
+import static api.Constants.MAIN_PAGE;
 
 @ExtendWith(AllureJunit5.class)
 public class AuthenticationTest {
@@ -32,7 +32,17 @@ public class AuthenticationTest {
     @BeforeEach
     void setUp() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        webDriver = WebDriverFactory.getWebDriver("chrome");
+
+        // Браузер берём извне: системное свойство -> переменная окружения -> дефолт "chrome"
+        String browser = System.getProperty("browser");
+        if (browser == null || browser.isBlank()) {
+            browser = System.getenv("BROWSER");
+        }
+        if (browser == null || browser.isBlank()) {
+            browser = "chrome";
+        }
+
+        webDriver = WebDriverFactory.getWebDriver(browser);
         webDriver.get(MAIN_PAGE);
 
         mainPage = new MainPage(webDriver);
@@ -42,8 +52,8 @@ public class AuthenticationTest {
         recoverPage = new RecoverPage(webDriver);
 
         userSteps.userCreate(user);
-
     }
+
     @Test
     @Description("Авторизация по кнопке Войти в аккаунт на Главной")
     void authMainPageAuthButton() {
@@ -52,6 +62,7 @@ public class AuthenticationTest {
         mainPage.accountClick();
         Assertions.assertTrue(accountPage.profileMenuIsDisplayed());
     }
+
     @Test
     @Description("Авторизация через кнопку Личный кабинет")
     void authMainAccountButton() {
@@ -60,6 +71,7 @@ public class AuthenticationTest {
         mainPage.openMainPage();
         Assertions.assertTrue(mainPage.createOrderButtonIsDisplayed());
     }
+
     @Test
     @Description("Авторизация через форму регистрации")
     void authRegistrationPage() {
@@ -69,6 +81,7 @@ public class AuthenticationTest {
         mainPage.accountClick();
         Assertions.assertTrue(accountPage.profileMenuIsDisplayed());
     }
+
     @Test
     @Description("Авторизация через форму восстановления пароля")
     void authRecoverPage() {
@@ -78,11 +91,10 @@ public class AuthenticationTest {
         mainPage.accountClick();
         Assertions.assertTrue(accountPage.profileMenuIsDisplayed());
     }
+
     @AfterEach
     void tearDown() {
         WebDriverFactory.driverQuit(webDriver);
-        userSteps
-                .userDelete(userSteps.getAccessToken(user));
+        userSteps.userDelete(userSteps.getAccessToken(user));
     }
-
 }
