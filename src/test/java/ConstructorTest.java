@@ -16,7 +16,15 @@ public class ConstructorTest {
     MainPage mainPage;
     @BeforeEach
     void setUp() {
-        webDriver = WebDriverFactory.getWebDriver("chrome");
+        String browser = System.getProperty("browser");
+        if (browser == null || browser.isBlank()) {
+            browser = System.getenv("BROWSER");
+        }
+        if (browser == null || browser.isBlank()) {
+            browser = "chrome";
+        }
+
+        webDriver = WebDriverFactory.getWebDriver(browser);
         webDriver.get(MAIN_PAGE);
         mainPage = new MainPage(webDriver);
     }

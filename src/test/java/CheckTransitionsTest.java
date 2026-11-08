@@ -34,7 +34,16 @@ public class CheckTransitionsTest {
     @BeforeEach
     void setUp() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        webDriver = WebDriverFactory.getWebDriver("chrome");
+
+        String browser = System.getProperty("browser");
+        if (browser == null || browser.isBlank()) {
+            browser = System.getenv("BROWSER");
+        }
+        if (browser == null || browser.isBlank()) {
+            browser = "chrome";
+        }
+
+        webDriver = WebDriverFactory.getWebDriver(browser);
         webDriver.get(MAIN_PAGE);
 
         mainPage = new MainPage(webDriver);
@@ -60,7 +69,7 @@ public class CheckTransitionsTest {
         Assertions.assertTrue(mainPage.constructorIsDisplayed());
     }
     @Test
-    @Description("Переход из личного кабинета по логотипу Ыеуддфк Игкпукы")
+    @Description("Переход из личного кабинета по логотипу")
     void transitionClickStellarBurgers() {
         mainPage.accountClick();
         accountPage.clickStellarBurgersLogo();

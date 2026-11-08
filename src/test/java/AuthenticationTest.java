@@ -33,7 +33,7 @@ public class AuthenticationTest {
     void setUp() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-        // Браузер берём извне: системное свойство -> переменная окружения -> дефолт "chrome"
+
         String browser = System.getProperty("browser");
         if (browser == null || browser.isBlank()) {
             browser = System.getenv("BROWSER");
